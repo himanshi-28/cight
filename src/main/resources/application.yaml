@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: cight
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cight
+    username: cightuser
+    password: cightpass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false       # fixes that WARN we saw earlier
+
+server:
+  port: 8028
+
+logging:
+  level:
+    root: INFO                # default level for everything
+    com.cight: DEBUG          # your own code shows DEBUG and above
+    org.hibernate.SQL: DEBUG  # shows actual SQL queries Spring runs
+  pattern:
+    console: "%d{HH:mm:ss} [%-5level] %logger{36} - %msg%n"   # cleaner timestamp format in console
