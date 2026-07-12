@@ -1,0 +1,18 @@
+cight:
+  security:
+    enabled: true
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH0_ISSUER_URI}
+          audience: ${AUTH0_AUDIENCE}
+  ai:
+    mcp:
+      server:
+        enabled: false
+
+server:
+  forward-headers-strategy: framework

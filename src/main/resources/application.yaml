@@ -1,29 +1,91 @@
 spring:
   application:
     name: cight
-
+  profiles:
+    default: local
   datasource:
-    url: jdbc:postgresql://localhost:5432/cight
-    username: cightuser
-    password: cightpass
-    driver-class-name: org.postgresql.Driver
-
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/cight}
+    username: ${DATABASE_USERNAME:cightuser}
+    password: ${DATABASE_PASSWORD:cightpass}
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: validate
+    open-in-view: false
     properties:
       hibernate:
         format_sql: true
-    open-in-view: false       # fixes that WARN we saw earlier
+  flyway:
+    enabled: true
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        enable.idempotence: true
+    consumer:
+      group-id: ${KAFKA_CONSUMER_GROUP:cight-analysis}
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  data:
+    redis:
+      url: ${REDIS_URL:redis://localhost:6379}
+  cache:
+    type: redis
+    redis:
+      time-to-live: 60s
+  ai:
+    model:
+      chat: ${AI_CHAT_MODEL:none}
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY:}
+        chat:
+          model: ${GEMINI_MODEL:gemini-2.5-flash}
+          temperature: 0.2
+    mcp:
+      server:
+        enabled: ${MCP_ENABLED:false}
+        name: cight
+        version: 1.0.0
+        protocol: STREAMABLE
 
 server:
-  port: 8028
+  port: ${PORT:8028}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+cight:
+  webhook:
+    secret: ${GITHUB_WEBHOOK_SECRET:local-development-secret}
+  kafka:
+    failure-topic: ${KAFKA_FAILURE_TOPIC:build.failures.v1}
+    publisher-delay-ms: ${OUTBOX_PUBLISHER_DELAY_MS:2000}
+  ai:
+    enabled: ${AI_ENABLED:false}
+    model: ${GEMINI_MODEL:gemini-2.5-flash}
+    prompt-version: v1
+    max-log-characters: 16000
+  github:
+    token: ${GITHUB_TOKEN:}
+  security:
+    enabled: ${SECURITY_ENABLED:false}
 
 logging:
   level:
-    root: INFO                # default level for everything
-    com.cight: DEBUG          # your own code shows DEBUG and above
-    org.hibernate.SQL: DEBUG  # shows actual SQL queries Spring runs
+    root: INFO
+    com.cight: DEBUG
   pattern:
-    console: "%d{HH:mm:ss} [%-5level] %logger{36} - %msg%n"   # cleaner timestamp format in console
+    console: "%d{HH:mm:ss} [%-5level] %logger{36} - %msg%n"

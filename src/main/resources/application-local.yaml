@@ -1,0 +1,9 @@
+cight:
+  security:
+    enabled: false
+
+spring:
+  ai:
+    mcp:
+      server:
+        enabled: ${MCP_ENABLED:true}

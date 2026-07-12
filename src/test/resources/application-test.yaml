@@ -1,0 +1,26 @@
+spring:
+  kafka:
+    listener:
+      auto-startup: false
+  ai:
+    model:
+      chat: none
+    mcp:
+      server:
+        enabled: false
+  cache:
+    type: simple
+
+cight:
+  ai:
+    enabled: false
+  kafka:
+    consumer-enabled: false
+    publisher-enabled: false
+  security:
+    enabled: false
+
+management:
+  health:
+    redis:
+      enabled: false

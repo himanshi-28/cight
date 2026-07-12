@@ -1,0 +1,9 @@
+.git
+.idea
+.env
+target
+*.iml
+.DS_Store
+lessons
+reference
+assets

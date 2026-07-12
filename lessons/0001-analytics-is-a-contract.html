@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 1: Analytics Is a Contract</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Analytics is a contract, not a calculation</h1>
+    <p class="lede">Your first CIGHT-003 skill is deciding what a metric means before choosing repository methods or writing Java.</p>
+  </header>
+
+  <section>
+    <h2>The tangible win</h2>
+    <p>After this ten-minute lesson, you should be able to explain why “success rate” is ambiguous and place each part of the analytics request in the correct application layer.</p>
+  </section>
+
+  <section>
+    <h2>Start with meaning</h2>
+    <p>Suppose CIght contains 8 successful builds, 2 failed builds, and 10 pending builds. Two formulas are mathematically valid:</p>
+    <div class="concept">
+      <p><strong>All recorded builds:</strong> <code>8 / 20 = 40%</code></p>
+      <p><strong>Completed builds:</strong> <code>8 / (8 + 2) = 80%</code></p>
+    </div>
+    <p>The computer cannot choose between them. That is a product and domain decision. A backend engineer first writes the metric definition, then makes code implement it.</p>
+  </section>
+
+  <section>
+    <h2>Put work in the right layer</h2>
+    <ol class="flow" aria-label="Analytics request flow">
+      <li>Controller</li>
+      <li>Analytics service</li>
+      <li>Repository</li>
+      <li>PostgreSQL</li>
+    </ol>
+    <ul>
+      <li><strong>Controller:</strong> owns HTTP routing and the response boundary.</li>
+      <li><strong>Service:</strong> owns the success-rate rule and empty-data behavior.</li>
+      <li><strong>Repository:</strong> expresses the data operations that the service needs.</li>
+      <li><strong>PostgreSQL:</strong> executes <code>COUNT</code> and <code>AVG</code> close to the data.</li>
+    </ul>
+    <p>Fetching every row and looping in Java would produce an answer, but it transfers unnecessary data and lets memory usage grow with table size. Database aggregates return the small result the service actually needs.</p>
+  </section>
+
+  <section>
+    <h2>Know the null edge</h2>
+    <p>PostgreSQL computes <code>AVG</code> over non-null values. If no non-null durations exist, the aggregate result is null. The repository reports database truth; the service decides what the API should return for that truth.</p>
+  </section>
+
+  <section class="quiz" data-quiz>
+    <h2>Retrieval check</h2>
+    <p>CIght has one million build rows. Where should their count be calculated?</p>
+    <div class="answers">
+      <button type="button" data-answer data-correct="true"
+              data-success="Correct. Return one aggregate result, not one million entities."
+              data-retry="Try again: think about moving less data.">Database computes it</button>
+      <button type="button" data-answer data-correct="false"
+              data-success="Correct. Return one aggregate result, not one million entities."
+              data-retry="Not yet. That requires transferring or materializing every matching row.">Service computes all</button>
+    </div>
+    <p class="feedback" data-feedback aria-live="polite"></p>
+  </section>
+
+  <section class="quiz" data-quiz>
+    <h2>Null check</h2>
+    <p>What does PostgreSQL do with null inputs while averaging durations?</p>
+    <div class="answers">
+      <button type="button" data-answer data-correct="true"
+              data-success="Correct. AVG uses the non-null duration values."
+              data-retry="Try again: null represents an absent value.">Null values skipped</button>
+      <button type="button" data-answer data-correct="false"
+              data-success="Correct. AVG uses the non-null duration values."
+              data-retry="Not quite. PostgreSQL does not treat null as numeric zero.">Null values counted</button>
+    </div>
+    <p class="feedback" data-feedback aria-live="polite"></p>
+  </section>
+
+  <section>
+    <h2>Your engineering task</h2>
+    <p>Define the denominator of CIght’s success rate in one sentence. Then defend it against the alternative. Do not write repository code until the contract is settled.</p>
+  </section>
+
+  <section>
+    <h2>Primary sources</h2>
+    <ul>
+      <li><a href="https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html">Spring Data JPA query methods</a></li>
+      <li><a href="https://docs.spring.io/spring-data/jpa/reference/repositories/query-keywords-reference.html">Spring Data repository query keywords</a></li>
+      <li><a href="https://www.postgresql.org/docs/current/functions-aggregate.html">PostgreSQL aggregate functions</a></li>
+    </ul>
+  </section>
+
+  <footer>
+    <p><a href="../reference/backend-glossary.html">Open the backend glossary</a></p>
+    <p>If anything is unclear, ask your agent before guessing. Questions are part of the feedback loop.</p>
+  </footer>
+</main>
+</body>
+</html>

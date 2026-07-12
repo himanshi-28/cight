@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 2: Your First CI Pipeline</title>
+  <link rel="stylesheet" href="../assets/course.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>A CI pipeline is an automated reviewer</h1>
+    <p class="lede">Before changing CIght's workflow, learn to trace what happens between a Git push and a trustworthy build result.</p>
+  </header>
+
+  <section>
+    <h2>The tangible win</h2>
+    <p>After ten minutes, you should be able to open CIght's workflow and explain its trigger, runner, steps, failure behavior, and current deployment boundary.</p>
+  </section>
+
+  <section>
+    <h2>Why CI exists</h2>
+    <p>Without automation, a developer can push code that compiles only on their laptop, breaks tests, or cannot be packaged. Continuous integration, or CI, runs the same agreed checks whenever code changes. It gives the team fast, repeatable evidence about whether a change is safe to integrate.</p>
+    <div class="concept">
+      <p><strong>CI does not prove the software has no bugs.</strong></p>
+      <p>It proves that the checks encoded in the pipeline passed in a clean environment.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>The GitHub Actions hierarchy</h2>
+    <ol class="flow" aria-label="GitHub Actions execution flow">
+      <li>Event</li>
+      <li>Workflow</li>
+      <li>Job</li>
+      <li>Runner</li>
+      <li>Steps</li>
+      <li>Result</li>
+    </ol>
+    <ul>
+      <li><strong>Event:</strong> something happens, such as a push or pull request.</li>
+      <li><strong>Workflow:</strong> the YAML automation stored under <code>.github/workflows</code>.</li>
+      <li><strong>Job:</strong> a group of steps that runs on one runner.</li>
+      <li><strong>Runner:</strong> the temporary machine executing the job.</li>
+      <li><strong>Step:</strong> one command or reusable action, executed in order.</li>
+      <li><strong>Result:</strong> success only if every required step succeeds.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>CI versus CD</h2>
+    <p><strong>CI</strong> builds and tests changes continuously. <strong>Continuous delivery</strong> keeps a validated release ready for a human-approved deployment. <strong>Continuous deployment</strong> automatically releases every passing change.</p>
+    <p>CIght currently performs CI: it tests, packages, and builds a Docker image. It does not yet push that image or deploy it to Render, so calling the current workflow a complete deployment pipeline would be inaccurate.</p>
+  </section>
+
+  <section>
+    <h2>Your current CIght pipeline</h2>
+    <p>Open <code>.github/workflows/ci.yml</code>. Read it top to bottom as a story:</p>
+    <ol>
+      <li>A push or pull request triggers the workflow.</li>
+      <li>GitHub creates an Ubuntu runner.</li>
+      <li>The runner checks out the repository.</li>
+      <li>It installs Java 21 and enables Maven dependency caching.</li>
+      <li>The Maven Wrapper compiles, tests, and packages CIght.</li>
+      <li>Docker verifies that the production image can be built.</li>
+    </ol>
+    <p>If Maven tests fail, the shell command exits non-zero. GitHub marks that step and job failed, and later steps do not run unless explicitly configured otherwise.</p>
+  </section>
+
+  <section class="quiz" data-quiz>
+    <h2>Retrieval check</h2>
+    <p>A unit test fails during <code>mvn verify</code>. What should the pipeline do?</p>
+    <div class="answers">
+      <button type="button" data-answer data-correct="true"
+              data-success="Correct. A failing required check must block integration."
+              data-retry="Try again: CI exists to expose unsafe changes.">Reject the change</button>
+      <button type="button" data-answer data-correct="false"
+              data-success="Correct. A failing required check must block integration."
+              data-retry="Not yet. Shipping would ignore the evidence CI produced.">Deploy the change</button>
+    </div>
+    <p class="feedback" data-feedback aria-live="polite"></p>
+  </section>
+
+  <section class="quiz" data-quiz>
+    <h2>Boundary check</h2>
+    <p>Does CIght's current workflow deploy the application to Render?</p>
+    <div class="answers">
+      <button type="button" data-answer data-correct="false"
+              data-success="Correct. It validates an image but does not publish or deploy it."
+              data-retry="Look for a command that authenticates and deploys to Render.">Yes, automatically</button>
+      <button type="button" data-answer data-correct="true"
+              data-success="Correct. It validates an image but does not publish or deploy it."
+              data-retry="Look for a command that authenticates and deploys to Render.">No, not yet</button>
+    </div>
+    <p class="feedback" data-feedback aria-live="polite"></p>
+  </section>
+
+  <section>
+    <h2>CIGHT-000: Trace the pipeline</h2>
+    <p>Do not edit code. Read CIght's workflow and answer your teacher's five questions without copying the lesson. Your deliverable is a clear explanation, not a commit.</p>
+  </section>
+
+  <section>
+    <h2>Primary sources</h2>
+    <ul>
+      <li><a href="https://docs.github.com/en/actions/get-started/understanding-github-actions">Understanding GitHub Actions</a></li>
+      <li><a href="https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax">Workflow syntax for GitHub Actions</a></li>
+    </ul>
+  </section>
+
+  <footer>
+    <p><a href="0001-analytics-is-a-contract.html">Previous lesson: Analytics is a contract</a></p>
+    <p>If a term is unclear, ask your agent before guessing. Questions are part of the feedback loop.</p>
+  </footer>
+</main>
+</body>
+</html>

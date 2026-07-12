@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: cight-api
+    runtime: docker
+    plan: free
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: cloud
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_USERNAME
+        sync: false
+      - key: DATABASE_PASSWORD
+        sync: false
+      - key: KAFKA_BOOTSTRAP_SERVERS
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: GITHUB_WEBHOOK_SECRET
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: AI_ENABLED
+        value: "true"
+      - key: AI_CHAT_MODEL
+        value: google-genai
+      - key: SECURITY_ENABLED
+        value: "true"
+      - key: AUTH0_ISSUER_URI
+        sync: false
+      - key: AUTH0_AUDIENCE
+        value: https://api.cight.dev
+      - key: MCP_ENABLED
+        value: "false"
