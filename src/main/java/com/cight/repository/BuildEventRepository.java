@@ -1,6 +1,7 @@
 package com.cight.repository;
 
 import com.cight.model.BuildEvent;
+import com.cight.model.BuildStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -13,7 +14,7 @@ public interface BuildEventRepository
     List<BuildEvent> findByRepoName(String repoName);
 
     // find all builds with a specific status
-    List<BuildEvent> findByStatus(String status);
+    List<BuildEvent> findByStatus(BuildStatus status);
 
     // find all builds for a repo, newest first
     List<BuildEvent> findByRepoNameOrderByCreatedAtDesc(String repoName);

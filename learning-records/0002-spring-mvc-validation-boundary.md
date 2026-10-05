@@ -1,0 +1,3 @@
+# Spring MVC validation boundary demonstrated
+
+The learner can trace a request through controller selection, JSON deserialization, Bean Validation, controller invocation, service work, and persistence; distinguish controller-level input validation from service/domain invariants; and explain that an MVC-slice test loads web infrastructure, mocks the service dependency, and does not load JPA or PostgreSQL. Evidence includes the learner-owned CIGHT-001 implementation, a reviewed MVC-slice test with five passing cases, correction of a false-positive branch fixture, and successful defence of all five interview checkpoints.

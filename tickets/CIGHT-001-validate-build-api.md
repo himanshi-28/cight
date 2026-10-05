@@ -1,7 +1,7 @@
 ---
 id: CIGHT-001
 title: Validate the build-creation HTTP boundary
-status: active
+status: complete
 week: 1
 roadmap: First Java and Spring API foundation ticket
 timebox: 90–120 minutes
@@ -144,4 +144,3 @@ Answer one question at a time during review:
 ## Learning-record evidence
 
 Do not create a learning record merely because the code passes. Evidence requires the focused test result, a reviewed diff, a correct request-flow explanation, and successful interview defence.
-

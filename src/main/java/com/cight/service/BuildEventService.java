@@ -1,6 +1,7 @@
 package com.cight.service;
 
 import com.cight.dto.BuildEventRequest;
+import com.cight.exception.BuildEventNotFoundException;
 import com.cight.model.BuildEvent;
 import com.cight.repository.BuildEventRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,14 +17,14 @@ public class BuildEventService {
     private final BuildEventRepository buildEventRepository;
 
     public BuildEvent saveBuildEvent(BuildEventRequest request) {
-        log.info("Saving build event for repo: {}", request.getRepoName());
+        log.info("Saving build event for repo: {}", request.repoName());
         BuildEvent buildEvent = BuildEvent.builder()
-                .repoName(request.getRepoName())
-                .branch(request.getBranch())
-                .status(request.getStatus())
-                .commitSha(request.getCommitSha())
-                .errorLog(request.getErrorLog())
-                .duration(request.getDuration())
+                .repoName(request.repoName())
+                .branch(request.branch())
+                .status(request.status())
+                .commitSha(request.commitSha())
+                .errorLog(request.errorLog())
+                .duration(request.duration())
                 .build();
 
         BuildEvent saved = buildEventRepository.save(buildEvent);
@@ -34,6 +35,11 @@ public class BuildEventService {
     public List<BuildEvent> getAllBuildEvents() {
         log.info("Fetching all build events");
         return buildEventRepository.findAll();
+    }
+
+    public BuildEvent getBuildEventById(String id) {
+        return buildEventRepository.findById(id)
+                .orElseThrow(() -> new BuildEventNotFoundException(id));
     }
 
     public List<BuildEvent> getBuildEventsByRepo(String repoName) {

@@ -38,7 +38,7 @@ CIght remains a modular monolith during the six-week path. Package boundaries ma
 - [Roadmap](ROADMAP.md)
 - [Current teaching notes](NOTES.md)
 - [Ticket format and lifecycle](tickets/README.md)
-- [Active ticket](tickets/CIGHT-001-validate-build-api.md)
+- [Active ticket](tickets/CIGHT-002-domain-api-errors.md)
 - [Trusted resources](RESOURCES.md)
 
 Only demonstrated understanding is recorded under `learning-records/`.
@@ -55,4 +55,3 @@ Docker, Kafka, PGvector, Valkey, Spring AI, MCP, security, and CI/CD are introdu
 ## Safety
 
 Never commit `.env`, credentials, API keys, raw prompts, private tool responses, or unsanitized logs. Live external calls are manual demonstrations; tests and CI remain deterministic.
-
