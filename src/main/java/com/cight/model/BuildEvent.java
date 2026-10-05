@@ -26,7 +26,8 @@ public class BuildEvent {
     private String branch;
 
     @Column(nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private BuildStatus status;
 
     private String commitSha;
 

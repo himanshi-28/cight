@@ -9,7 +9,7 @@
 
 ## Week 1 — Java and Spring API foundations
 
-- [ ] **CIGHT-001 — Validate the build-creation HTTP boundary**
+- [x] **CIGHT-001 — Validate the build-creation HTTP boundary**
 - [ ] **CIGHT-002 — Introduce domain types, API records, exceptions, and `ProblemDetail`**
 - [ ] **CIGHT-003 — Implement the analytics contract with database aggregation**
 - [ ] **CIGHT-004 — Build the unit, MVC-slice, and repository-test foundation**
@@ -72,4 +72,3 @@
 ### Milestone
 
 - [ ] The end-to-end local demonstration works and the learner can defend the architecture without reading a solution.
-

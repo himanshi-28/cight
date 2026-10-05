@@ -2,6 +2,7 @@ package com.cight.service;
 
 import com.cight.dto.BuildEventRequest;
 import com.cight.dto.GitHubWebhookPayload;
+import com.cight.model.BuildStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class WebhookService {
         String branch = payload.getRef()
                 .replace("refs/heads/", "");
 
-        String status = "PENDING";
+        BuildStatus status = BuildStatus.PENDING;
         Long duration = null;
 
         if (payload.getWorkflowRun() != null) {
@@ -37,14 +38,9 @@ public class WebhookService {
             commitSha = payload.getHeadCommit().getId();
         }
 
-        BuildEventRequest request = BuildEventRequest.builder()
-                .repoName(payload.getRepository().getFullName())
-                .branch(branch)
-                .status(status)
-                .commitSha(commitSha)
-                .errorLog(null)
-                .duration(duration)
-                .build();
+        BuildEventRequest request = new BuildEventRequest(
+                payload.getRepository().getFullName(), branch, status,
+                commitSha, null, duration);
 
         buildEventService.saveBuildEvent(request);
 
@@ -52,16 +48,16 @@ public class WebhookService {
                 payload.getRepository().getFullName());
     }
 
-    private String mapConclusionToStatus(String conclusion) {
+    private BuildStatus mapConclusionToStatus(String conclusion) {
 
         if ("failure".equalsIgnoreCase(conclusion)) {
-            return "FAILURE";
+            return BuildStatus.FAILURE;
         }
 
         if ("success".equalsIgnoreCase(conclusion)) {
-            return "SUCCESS";
+            return BuildStatus.SUCCESS;
         }
 
-        return "UNKNOWN";
+        return BuildStatus.UNKNOWN;
     }
 }
